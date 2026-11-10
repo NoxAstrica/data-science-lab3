@@ -5,28 +5,16 @@ from sklearn.feature_extraction.text import CountVectorizer
 
 
 def bag_of_words(texts: List[str]) -> pd.DataFrame:
-    """
-    Convert a list of text strings into a Bag of Words representation.
+    if not isinstance(texts, list):
+        raise TypeError("Input texts must be a list")
+    if not texts:
+        raise ValueError("Input texts cannot be empty")
+    if not all(isinstance(t, str) for t in texts):
+        raise ValueError("All texts must be strings")
 
-    Args:
-        texts (List[str]): A list of text strings.
-
-    Returns:
-        pd.DataFrame: A DataFrame representing the Bag of Words model,
-                      with words as columns and their frequencies as values.
-
-    Raises:
-        TypeError: If texts is not a list.
-        ValueError: If texts is empty or contains non-string elements.
-
-    Example:
-        >>> texts = ["I love NLP", "NLP is fun"]
-        >>> bag_of_words(texts)
-           fun  i  is  love  nlp
-        0    0  1   0     1    1
-        1    1  0   1     0    1
-    """
-    pass
+    vectorizer = CountVectorizer(token_pattern=r"(?u)\b\w+\b")
+    matrix = vectorizer.fit_transform(texts)
+    df = pd.DataFrame(matrix.toarray(), columns=vectorizer.get_feature_names_out())
     return df
 
 

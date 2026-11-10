@@ -5,24 +5,18 @@ from nltk.tokenize import word_tokenize
 
 
 def clean_and_tokenize(text: str) -> List[str]:
-    """
-    Clean text by removing punctuation, converting to lowercase, and tokenizing.
+    if text is None:
+        raise ValueError("Input text cannot be empty")
+    if not isinstance(text, str):
+        raise TypeError("Input text must be a string")
+    if not text.strip():
+        raise ValueError("Input text cannot be empty")
 
-    Args:
-        text (str): The input text string to clean and tokenize.
+    cleaned = re.sub(r"[^\w\s]|_", "", text.lower())
 
-    Returns:
-        List[str]: A list of tokens (words).
-
-    Raises:
-        ValueError: If text is None or empty.
-        TypeError: If text is not a string.
-
-    Example:
-        >>> clean_and_tokenize("Hello, World!")
-        ['hello', 'world']
-    """
-    pass
+    tokens = word_tokenize(cleaned)
+    if not tokens:
+        raise ValueError("text contains no words")
     return tokens
 
 

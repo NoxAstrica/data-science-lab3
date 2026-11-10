@@ -4,26 +4,18 @@ from nltk.stem import PorterStemmer, WordNetLemmatizer
 
 
 def stem_and_lemmatize(tokens: List[str]) -> Dict[str, List[str]]:
-    """
-    Apply stemming and lemmatization to input tokens.
+    if not isinstance(tokens, list):
+        raise TypeError("Input tokens must be a list")
+    if not tokens:
+        raise ValueError("Input tokens cannot be empty")
+    if not all(isinstance(t, str) for t in tokens):
+        raise ValueError("All tokens must be strings")
 
-    Args:
-        tokens (List[str]): A list of tokens (words).
+    stemmer = PorterStemmer()
+    lemmatizer = WordNetLemmatizer()
 
-    Returns:
-        Dict[str, List[str]]: A dictionary with 'original', 'stemmed', and 
-                             'lemmatized' token lists.
-
-    Raises:
-        TypeError: If tokens is not a list.
-        ValueError: If tokens is empty or contains non-string elements.
-
-    Example:
-        >>> stem_and_lemmatize(['running', 'cats'])
-        {'original': ['running', 'cats'], 'stemmed': ['run', 'cat'], 
-         'lemmatized': ['running', 'cat']}
-    """
-    pass
+    stemmed = [stemmer.stem(t) for t in tokens]
+    lemmatized = [lemmatizer.lemmatize(t) for t in tokens]
 
     return {
         "original": tokens,

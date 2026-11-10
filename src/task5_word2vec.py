@@ -10,59 +10,31 @@ def train_word2vec(
     min_count: int = 1, 
     workers: int = 4
 ) -> Word2Vec:
-    """
-    Train a Word2Vec model on a list of tokenized sentences.
+    if not isinstance(sentences, list):
+        raise TypeError("Sentences must be a list.")
+    if not sentences:
+        raise ValueError("Sentences cannot be empty.")
+    for sentence in sentences:
+        if not isinstance(sentence, list):
+            raise TypeError("Sentences must be a list of lists.")
 
-    Args:
-        sentences (List[List[str]]): A list of tokenized sentences.
-        vector_size (int): Dimensionality of the word vectors. Default is 100.
-        window (int): Maximum distance between current and predicted word. Default is 5.
-        min_count (int): Ignores words with frequency lower than this. Default is 1.
-        workers (int): Number of worker threads for training. Default is 4.
-
-    Returns:
-        Word2Vec: A trained Word2Vec model.
-
-    Raises:
-        TypeError: If sentences is not a list of lists.
-        ValueError: If sentences is empty or contains invalid data.
-
-    Example:
-        >>> sentences = [['i', 'love', 'nlp'], ['nlp', 'is', 'fun']]
-        >>> model = train_word2vec(sentences)
-        >>> 'nlp' in model.wv
-        True
-    """
-    pass
+    model = Word2Vec(
+        sentences=sentences,
+        vector_size=vector_size,
+        window=window,
+        min_count=min_count,
+        workers=workers
+    )
     return model
 
 
 def find_similar_words(model: Word2Vec, word: str, topn: int = 10) -> List[Tuple[str, float]]:
-    """
-    Find the most similar words to a given word using a trained Word2Vec model.
-
-    Args:
-        model (Word2Vec): A trained Word2Vec model.
-        word (str): The word to find similar words for.
-        topn (int): Number of top similar words to return. Default is 10.
-
-    Returns:
-        List[Tuple[str, float]]: A list of tuples with similar words and their 
-                                 similarity scores.
-
-    Raises:
-        KeyError: If the word is not in the model's vocabulary.
-        TypeError: If model is not a Word2Vec model or word is not a string.
-
-    Example:
-        >>> sentences = [['i', 'love', 'nlp'], ['nlp', 'is', 'fun']]
-        >>> model = train_word2vec(sentences)
-        >>> similar = find_similar_words(model, 'nlp', topn=2)
-        >>> len(similar) <= 2
-        True
-    """
-    pass
-
+    if not isinstance(model, Word2Vec):
+        raise TypeError("Model must be a Word2Vec instance.")
+    if not isinstance(word, str):
+        raise TypeError("Word must be a string.")
+    if word not in model.wv:
+        raise KeyError(f"Word '{word}' is not in vocabulary.")
     return model.wv.most_similar(word, topn=topn)
 
 
